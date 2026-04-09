@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Array Cafe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#F7F2EA;
+  --espresso:#1C1208;
+  --brown:#5C3317;
+  --gold:#B8842A;
+  --red:#C0392B;
+  --latte:#D6B890;
+  --mist:#EDE7DA;
+  --text:#231A0E;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 3.5rem;background:var(--espresso);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);letter-spacing:-0.01em;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;color:var(--latte);transition:color 0.2s;}
+.nav-links a:hover{color:var(--cream);}
+.hero{display:grid;grid-template-columns:1.1fr 0.9fr;min-height:90vh;}
+.hero-left{background:var(--espresso);padding:5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.hero-left::after{content:'';position:absolute;bottom:-120px;right:-60px;width:350px;height:350px;border-radius:50%;background:var(--brown);opacity:0.15;}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.75rem;display:flex;align-items:center;gap:0.75rem;}
+.hero-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--gold);}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,4.5vw,4.2rem);line-height:1.06;color:var(--cream);margin-bottom:1.5rem;}
+.hero-h1 em{color:var(--latte);font-style:italic;}
+.hero-body{font-size:0.95rem;line-height:1.8;color:var(--latte);max-width:400px;margin-bottom:2.5rem;font-weight:300;}
+.hero-btn{display:inline-block;background:var(--gold);color:var(--espresso);font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;padding:0.9rem 2rem;text-decoration:none;transition:background 0.2s;width:fit-content;}
+.hero-btn:hover{background:var(--latte);}
+.hero-right{position:relative;overflow:hidden;background:var(--brown);}
+.hero-img{width:100%;height:100%;object-fit:cover;display:block;opacity:0.75;mix-blend-mode:multiply;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,18,8,0.85) 0%,rgba(28,18,8,0.1) 60%);}
+.hero-caption{position:absolute;bottom:2.5rem;left:2.5rem;right:2.5rem;z-index:2;}
+.hero-caption-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;}
+.hero-caption-text{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--cream);line-height:1.4;}
+.marquee{background:var(--gold);padding:0.65rem 0;overflow:hidden;white-space:nowrap;}
+.marquee-inner{display:inline-flex;gap:2.5rem;animation:scroll 24s linear infinite;}
+.marquee span{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--espresso);}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.menu-section{padding:5.5rem 3.5rem;background:var(--cream);}
+.sec-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.75rem;}
+.sec-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);}
+.sec-title{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--espresso);margin-bottom:2.5rem;}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--latte);margin-bottom:2.5rem;}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.7rem 1.4rem;border:none;background:transparent;cursor:pointer;color:var(--brown);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
+.tab.on{color:var(--espresso);border-bottom-color:var(--gold);}
+.tab:hover{color:var(--espresso);}
+.panel{display:none;}.panel.on{display:block;}
+.menu-note{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--brown);opacity:0.7;margin-bottom:1.5rem;font-style:italic;}
+.menu-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--latte);}
+.menu-row{display:grid;grid-template-columns:1fr auto;align-items:start;gap:1.5rem;padding:1.25rem 1.5rem;background:var(--cream);border-bottom:1px solid var(--mist);transition:background 0.15s;}
+.menu-row:last-child{border-bottom:none;}
+.menu-row:hover{background:var(--mist);}
+.menu-row-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--espresso);margin-bottom:0.3rem;}
+.menu-row-desc{font-size:0.82rem;line-height:1.55;color:var(--brown);}
+.menu-row-tags{display:flex;gap:0.4rem;margin-top:0.5rem;flex-wrap:wrap;}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.5rem;background:var(--mist);color:var(--brown);border:1px solid var(--latte);}
+.tag.gf{background:#EAF3DE;color:#3B6D11;border-color:#97C459;}
+.tag.v{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5;}
+.tag.vegan{background:#EAF3DE;color:#3B6D11;border-color:#97C459;}
+.about{display:grid;grid-template-columns:1fr 1fr;background:var(--espresso);}
+.about-left{padding:5.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;}
+.about-title{font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--cream);line-height:1.1;margin-bottom:1.5rem;}
+.about-title em{color:var(--latte);font-style:italic;}
+.about-body{font-size:0.93rem;line-height:1.85;color:var(--latte);font-weight:300;max-width:420px;}
+.about-right{display:flex;flex-direction:column;justify-content:flex-end;background:var(--brown);padding:3rem;position:relative;overflow:hidden;}
+.about-right-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;}
+.about-details{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(214,184,144,0.2);}
+.about-detail{background:rgba(28,18,8,0.7);padding:1.5rem;backdrop-filter:blur(4px);}
+.about-detail-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;}
+.about-detail-val{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);}
+.reviews{background:var(--mist);padding:5.5rem 3.5rem;}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.review{background:var(--cream);padding:1.75rem;border-top:3px solid var(--gold);}
+.review-stars{color:var(--gold);font-size:0.75rem;letter-spacing:0.1em;margin-bottom:0.9rem;}
+.review-text{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.65;color:var(--espresso);margin-bottom:1rem;}
+.review-author{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown);}
+.location{display:grid;grid-template-columns:1fr 1fr;}
+.loc-info{padding:5.5rem 3.5rem;background:var(--cream);}
+.info-block{margin-bottom:2rem;}
+.info-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;}
+.info-lbl::before{content:'';display:inline-block;width:12px;height:1px;background:var(--gold);}
+.info-val{font-size:0.92rem;line-height:1.65;color:var(--text);}
+.info-val a{color:var(--brown);text-decoration:none;}
+.hours-tbl{width:100%;border-collapse:collapse;font-size:0.85rem;}
+.hours-tbl td{padding:0.45rem 0;border-bottom:1px solid var(--mist);}
+.hours-tbl td:first-child{color:var(--brown);width:110px;font-weight:400;}
+.hours-tbl td:last-child{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;letter-spacing:0.05em;}
+.closed td{opacity:0.38;}
+.loc-map{background:var(--mist);position:relative;}
+.loc-map iframe{width:100%;height:100%;min-height:520px;border:none;display:block;}
+footer{background:var(--espresso);padding:2rem 3.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(184,132,42,0.25);}
+.foot-logo{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);}
+.foot-logo span{color:var(--gold);}
+.foot-note{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--latte);opacity:0.6;text-transform:uppercase;}
+@media(max-width:860px){
+  nav{padding:1rem 1.5rem;}
+  .hero{grid-template-columns:1fr;}
+  .hero-right{min-height:280px;}
+  .menu-section,.reviews,.loc-info{padding:4rem 1.5rem;}
+  .about{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:1fr;}
+  .location{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:0.75rem;text-align:center;padding:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Array<span>.</span>Cafe</div>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#visit">Visit</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Carl R. Woese Institute for Genomic Biology · Urbana</p>
+    <h1 class="hero-h1">Where the<br>campus comes<br><em>to gather.</em></h1>
+    <p class="hero-body">An independent café tucked in the heart of UIUC. Freshly made sandwiches, craft coffee, and a community that keeps coming back. Mon–Fri, 8 AM to 3:30 PM.</p>
+    <a href="#menu" class="hero-btn">Explore the menu →</a>
+  </div>
+  <div class="hero-right">
+    <img class="hero-img" src="interior.jpg" alt="Array Cafe interior with pendant lights and counter seating">
+    <div class="hero-overlay"></div>
+    <div class="hero-caption">
+      <p class="hero-caption-label">Inside Array Cafe</p>
+      <p class="hero-caption-text">"Such a hidden gem on campus."</p>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-inner">
+    <span>Spiced Chai Lattes</span><span>·</span>
+    <span>Fresh Sandwiches</span><span>·</span>
+    <span>Strawberry Yogurt Parfaits</span><span>·</span>
+    <span>Daily Specials</span><span>·</span>
+    <span>Ice Rage Frozen Drinks</span><span>·</span>
+    <span>Local Honey</span><span>·</span>
+    <span>Pastries &amp; Muffins</span><span>·</span>
+    <span>Non-Profit · Student Run</span><span>·</span>
+    <span>Gluten-Free Options</span><span>·</span>
+    <span>Vegan Options</span><span>·</span>
+    <span>Spiced Chai Lattes</span><span>·</span>
+    <span>Fresh Sandwiches</span><span>·</span>
+    <span>Strawberry Yogurt Parfaits</span><span>·</span>
+    <span>Daily Specials</span><span>·</span>
+    <span>Ice Rage Frozen Drinks</span><span>·</span>
+    <span>Local Honey</span><span>·</span>
+    <span>Pastries &amp; Muffins</span><span>·</span>
+    <span>Non-Profit · Student Run</span><span>·</span>
+    <span>Gluten-Free Options</span><span>·</span>
+    <span>Vegan Options</span><span>·</span>
+  </div>
+</div>
+
+<section class="menu-section" id="menu">
+  <p class="sec-eyebrow">What we serve</p>
+  <h2 class="sec-title">The Menu</h2>
+
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab('salads',this)">Salads</button>
+    <button class="tab" onclick="switchTab('sandwiches',this)">Sandwiches</button>
+    <button class="tab" onclick="switchTab('wraps',this)">Wraps &amp; Paninis</button>
+    <button class="tab" onclick="switchTab('drinks',this)">Drinks &amp; More</button>
+  </div>
+
+  <div id="tab-salads" class="panel on">
+    <p class="menu-note">GF = gluten free · V = vegetarian · All salads made fresh daily</p>
+    <div class="menu-list">
+      <div class="menu-row"><div><div class="menu-row-name">Greek Salad</div><div class="menu-row-desc">Romaine lettuce, grape tomatoes, diced cucumbers, Kalamata olives, feta cheese and pepperoncinis. Aegean Vinaigrette.</div><div class="menu-row-tags"><span class="tag gf">GF</span><span class="tag v">V</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Chef Salad</div><div class="menu-row-desc">Romaine lettuce, grape tomatoes, turkey, ham, cheddar cheese, eggs and bacon. Ranch Dressing.</div><div class="menu-row-tags"><span class="tag gf">GF</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Thai Salad</div><div class="menu-row-desc">Mixed greens, peppers, edamame, red onions, cucumbers, shredded carrots and peanuts. Thai Chili Vinaigrette.</div><div class="menu-row-tags"><span class="tag gf">GF</span><span class="tag v">V</span><span class="tag vegan">Vegan</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Quinoa, Farro &amp; Cous-Cous Salad</div><div class="menu-row-desc">Edamame, garbanzo beans, Brussels sprouts, red bell pepper, cucumber and a sherry vinaigrette.</div><div class="menu-row-tags"><span class="tag v">V</span><span class="tag vegan">Vegan</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Asian Noodles</div><div class="menu-row-desc">Angel hair pasta, teriyaki sauce, diced red peppers, green onions, carrots and peanuts.</div><div class="menu-row-tags"><span class="tag v">V</span><span class="tag vegan">Vegan</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Curried Rice Salad</div><div class="menu-row-desc">Cranberries, green onions and peanuts.</div><div class="menu-row-tags"><span class="tag gf">GF</span></div></div></div>
+    </div>
+  </div>
+
+  <div id="tab-sandwiches" class="panel">
+    <p class="menu-note">Freshly made to order · Ask about daily specials</p>
+    <div class="menu-list">
+      <div class="menu-row"><div><div class="menu-row-name">Turkey Sandwich</div><div class="menu-row-desc">Romaine, tomato and swiss cheese on a Pekara brioche roll.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Cranberry Chicken Salad Sandwich</div><div class="menu-row-desc">Mixed greens on wholewheat.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Pastrami</div><div class="menu-row-desc">Spicy brown mustard, pickles and coleslaw on marble rye.</div></div></div>
+    </div>
+  </div>
+
+  <div id="tab-wraps" class="panel">
+    <p class="menu-note">GF = gluten free · V = vegetarian</p>
+    <div class="menu-list">
+      <div class="menu-row"><div><div class="menu-row-name">Chicken Caesar Wrap</div><div class="menu-row-desc">Chicken, shredded romaine, Caesar dressing and parmesan in a spinach tortilla.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Asian Vegan Wrap</div><div class="menu-row-desc">Carrots, cabbage, jicama, red bell peppers and shiitake mushrooms in a spinach tortilla. Served with a chili dipping sauce.</div><div class="menu-row-tags"><span class="tag v">V</span><span class="tag vegan">Vegan</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Gluten Free Curry Chicken Wrap</div><div class="menu-row-desc">Shredded chicken, curry aioli, peanuts, red bell peppers, cabbage and sushi rice in a nori wrap.</div><div class="menu-row-tags"><span class="tag gf">GF</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Chicken Cordon Bleu Panini</div><div class="menu-row-desc">Chicken, sliced ham and swiss cheese on toasted sourdough bread.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Grilled Vegetable Panini</div><div class="menu-row-desc">Grilled zucchini, grilled peppers, portobello mushrooms and mozzarella on toasted sourdough bread.</div><div class="menu-row-tags"><span class="tag v">V</span></div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Buffalo Chicken Quesadilla</div><div class="menu-row-desc">Chicken, buffalo sauce and Monterey Jack cheese in a flour tortilla. Ranch dip on the side.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Vegetable Quesadilla</div><div class="menu-row-desc">Monterey Jack cheese, black beans, sautéed peppers and onions in corn tortillas.</div><div class="menu-row-tags"><span class="tag gf">GF</span><span class="tag v">V</span></div></div></div>
+    </div>
+  </div>
+
+  <div id="tab-drinks" class="panel">
+    <p class="menu-note">Ask about the Coffee Club for regular visitor deals · Local IGB honey available as an add-on</p>
+    <div class="menu-list">
+      <div class="menu-row"><div><div class="menu-row-name">Spiced Chai Latte</div><div class="menu-row-desc">A house favorite made to order by Carlos. Aromatic, warming, and highly recommended by regulars.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Espresso &amp; Lattes</div><div class="menu-row-desc">Classic espresso drinks. Customize your milk and shot count. Add local honey for a natural sweetener.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Ice Rage Frozen Drinks</div><div class="menu-row-desc">A beloved campus classic. Blended frozen drinks to beat the Champaign heat.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Strawberry Yogurt Parfait</div><div class="menu-row-desc">Highly recommended. Fresh, creamy, and great as a light lunch or snack.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Pastries &amp; Muffins</div><div class="menu-row-desc">Rotating bakery case — think caramel apple muffins, croissants, and seasonal options.</div></div></div>
+      <div class="menu-row"><div><div class="menu-row-name">Hot Dogs &amp; Ice Cream</div><div class="menu-row-desc">Quick bites available throughout the day.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-left">
+    <p class="sec-eyebrow" style="color:var(--gold);">Who we are</p>
+    <h2 class="about-title">A campus<br>staple, <em>worth<br>finding.</em></h2>
+    <p class="about-body">Array Cafe is a beloved neighborhood gathering spot in Urbana where genuine hospitality meets quality craft. This independent café combines thoughtfully prepared coffee with delicious lunch options, creating the kind of welcoming atmosphere you won't find at chain establishments. With cozy seating and a strong community following, Array Cafe invites you to slow down, connect with neighbors, and savor food and coffee made with real care.</p>
+  </div>
+  <div class="about-right">
+    <img class="about-right-img" src="interior.jpg" alt="Array Cafe interior">
+    <div class="about-details">
+      <div class="about-detail"><div class="about-detail-label">Location</div><div class="about-detail-val">IGB Lower Level</div></div>
+      <div class="about-detail"><div class="about-detail-label">Type</div><div class="about-detail-val">Non-Profit Café</div></div>
+      <div class="about-detail"><div class="about-detail-label">Open</div><div class="about-detail-val">Mon–Fri</div></div>
+      <div class="about-detail"><div class="about-detail-label">Google Rating</div><div class="about-detail-val">★ 4.2 / 5</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <p class="sec-eyebrow">From Google &amp; Yelp</p>
+  <h2 class="sec-title">What people are saying</h2>
+  <div class="reviews-grid">
+    <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Cozy and yummy. Very glad to find good lunch on campus. The strawberry yogurt is highly recommended."</p><div class="review-author">— Wei-Chia S., Local Guide</div></div>
+    <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Carlos is super nice and he makes amazing Spiced Chai Lattes! Great place to grab a bite or a drink, highly recommend it!"</p><div class="review-author">— Allison K., Local Guide</div></div>
+    <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Wonderful to see Array still trucking along — incredibly affordable lunch and coffee options. Really well stocked."</p><div class="review-author">— Colter W., Local Guide</div></div>
+    <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"The workers are very nice, the drinks came out quickly and were amazing at a great price. I recommend the chai lattes!"</p><div class="review-author">— Alla R., Google Review</div></div>
+    <div class="review"><div class="review-stars">★★★★</div><p class="review-text">"Good place for a quick bite and coffee. Great seating, conveniently located — and they have fresh local honey!"</p><div class="review-author">— Bhoomika M., Local Guide</div></div>
+    <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Tasty coffee and fair price. Friendly staff and clean environment."</p><div class="review-author">— Yijun W., Yelp</div></div>
+  </div>
+</section>
+
+<section class="location" id="visit">
+  <div class="loc-info">
+    <p class="sec-eyebrow">Find us</p>
+    <h2 class="sec-title" style="margin-bottom:2.5rem;">Come visit</h2>
+    <div class="info-block">
+      <div class="info-lbl">Address</div>
+      <div class="info-val">1206 W Gregory Dr, Urbana, IL 61801<br><span style="font-size:0.8rem;color:var(--brown);">Lower level of the IGB Building · Look for the colorful blob sculptures outside</span></div>
+    </div>
+    <div class="info-block">
+      <div class="info-lbl">Phone</div>
+      <div class="info-val"><a href="tel:+12172441113">(217) 244-1113</a></div>
+    </div>
+    <div class="info-block">
+      <div class="info-lbl">Hours</div>
+      <table class="hours-tbl">
+        <tr><td>Monday</td><td>8:00 AM – 3:30 PM</td></tr>
+        <tr><td>Tuesday</td><td>8:00 AM – 3:30 PM</td></tr>
+        <tr><td>Wednesday</td><td>8:00 AM – 3:30 PM</td></tr>
+        <tr><td>Thursday</td><td>8:00 AM – 3:30 PM</td></tr>
+        <tr><td>Friday</td><td>8:00 AM – 3:30 PM</td></tr>
+        <tr class="closed"><td>Saturday</td><td>Closed</td></tr>
+        <tr class="closed"><td>Sunday</td><td>Closed</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="loc-map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3052.0!2d-88.2248!3d40.1068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880cd74b2e5e69e7%3A0x8a8c9d4a0e5e69e7!2sArray%20Cafe!5e0!3m2!1sen!2sus!4v1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">Array<span>.</span>Cafe</div>
+  <div class="foot-note">1206 W Gregory Dr, Urbana · Mon–Fri 8 AM–3:30 PM · (217) 244-1113</div>
+</footer>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
